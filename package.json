@@ -1,0 +1,22 @@
+{
+  "name": "simple-proxy",
+  "version": "1.0.0",
+  "description": "Just a simple server to proxy request",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yakima-Teng/simple-proxy.git"
+  },
+  "keywords": [
+    "proxy"
+  ],
+  "author": "cleveryun@163.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Yakima-Teng/simple-proxy/issues"
+  },
+  "homepage": "https://github.com/Yakima-Teng/simple-proxy#readme"
+}

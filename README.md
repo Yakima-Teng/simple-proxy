@@ -1,2 +1,3 @@
 # simple-proxy
-simple tools to proxy request
+
+Just a simple server to proxy request.
