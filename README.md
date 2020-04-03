@@ -6,10 +6,10 @@ Just a simple server to proxy request.
 
 ***建议使用`pm2`进行项目的启动与维护。***
 
-1、全局安装pm2依赖
+1、安装依赖
 
 ```bash
-npm i -g pm2
+npm run installDependencies
 ```
 
 2、启动项目
