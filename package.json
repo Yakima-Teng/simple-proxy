@@ -18,5 +18,12 @@
   "bugs": {
     "url": "https://github.com/Yakima-Teng/simple-proxy/issues"
   },
-  "homepage": "https://github.com/Yakima-Teng/simple-proxy#readme"
+  "homepage": "https://github.com/Yakima-Teng/simple-proxy#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "http-proxy-middleware": "^0.17.3"
+  }
 }
