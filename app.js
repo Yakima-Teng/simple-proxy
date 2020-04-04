@@ -19,7 +19,7 @@ app.all('*', (req, res, next) => {
 
 // proxy api requests
 Object.keys(config.proxyTable).forEach(function (context) {
-    const options = config.proxyTable[context]
+    let options = config.proxyTable[context]
     if (typeof options === 'string') {
         options = { target: options }
     }
