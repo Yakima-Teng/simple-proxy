@@ -31,7 +31,7 @@ Object.keys(config.proxyTable).forEach(function (context) {
         requestId = uuid.v1()
         console.log('  ')
         console.log(`************* request start *************`)
-        console.log(`[${getDateStr()} ${req.method}] ${req.url}`)
+        console.log(`[${req.method}] ${req.url}`)
         console.log(`requestId: ${requestId}`)
         console.log(`httpVersion: ${req.httpVersion}`)
         if (req.method === 'GET') {
@@ -54,7 +54,7 @@ Object.keys(config.proxyTable).forEach(function (context) {
             const usedTime = +new Date() - startTime
             console.log('  ')
             console.log(`************* response start *************`)
-            console.log(`[${getDateStr()} ${req.method}] ${req.url}`)
+            console.log(`[${req.method}] ${req.url}`)
             console.log(`requestId: ${requestId}`)
             console.log(`httpVersion: ${proxyRes.httpVersion}`)
             console.log(`consume time: ${usedTime}ms`)
@@ -142,16 +142,4 @@ function onListening () {
 function toDouble (val) {
     if (val < 10) { return '0' + val }
     return '' + val
-}
-
-function getDateStr () {
-    const objDate = new Date()
-    const year = objDate.getFullYear()
-    const month = objDate.getMonth() + 1
-    const date = objDate.getDate()
-    const hour = objDate.getHours()
-    const minute = objDate.getMinutes()
-    const second = objDate.getSeconds()
-    const millisecond = objDate.getMilliseconds()
-    return `${year}-${toDouble(month)}-${toDouble(date)} ${toDouble(hour)}:${toDouble(minute)}:${toDouble(second)} ${millisecond}`
 }
