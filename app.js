@@ -35,7 +35,7 @@ Object.keys(config.proxyTable).forEach(function (context) {
         console.log(`requestId: ${requestId}`)
         console.log(`httpVersion: ${req.httpVersion}`)
         if (req.method === 'GET') {
-            console.log(`query: ${JSON.stringify(req.query)}`)
+            console.log(`query: ${JSON.stringify(req.query, null, 2)}`)
         }
         Object.keys(req.headers).forEach((key) => {
             console.log(`header.${key}: ${req.headers[key]}`)
@@ -44,14 +44,31 @@ Object.keys(config.proxyTable).forEach(function (context) {
         console.log('  ')
     }
     options.onProxyRes = (proxyRes, req, res) => {
-        const usedTime = +new Date() - startTime
-        console.log('  ')
-        console.log(`************* response start *************`)
-        console.log(`[${getDateStr()} ${req.method}] ${req.url}`)
-        console.log(`requestId: ${requestId}`)
-        console.log(`consume time: ${usedTime}ms`)
-        console.log(`************* response end *************`)
-        console.log('  ')
+        const proxyHeaders = proxyRes.headers
+        const chunks = []
+        proxyRes.on('data', chunk => {
+            chunks.push(chunk)
+        })
+        proxyRes.on('end', () => {
+            const buffer = Buffer.concat(chunks)
+            const usedTime = +new Date() - startTime
+            console.log('  ')
+            console.log(`************* response start *************`)
+            console.log(`[${getDateStr()} ${req.method}] ${req.url}`)
+            console.log(`requestId: ${requestId}`)
+            console.log(`httpVersion: ${proxyRes.httpVersion}`)
+            console.log(`consume time: ${usedTime}ms`)
+            Object.keys(proxyRes.headers).forEach((key) => {
+                console.log(`header.${key}: ${proxyRes.headers[key]}`)
+            })
+            try {
+                console.log(`responseText: ${JSON.stringify(JSON.parse(buffer.toString()), null, 2)}`)
+            } catch (err) {
+                console.log(`responseText: ${buffer.toString()}`)
+            }
+            console.log(`************* response end *************`)
+            console.log('  ')
+        })
     }
     app.use(proxyMiddleware(context, options))
 })
