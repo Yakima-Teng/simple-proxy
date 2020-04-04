@@ -138,8 +138,3 @@ function onListening () {
 
     console.log(`[MAIN] Listening on ${bind}`)
 }
-
-function toDouble (val) {
-    if (val < 10) { return '0' + val }
-    return '' + val
-}
