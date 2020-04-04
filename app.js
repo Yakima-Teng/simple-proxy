@@ -4,13 +4,13 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const proxyMiddleware = require('http-proxy-middleware')
 const cors = require('cors')
+const uuid = require('uuid')
 const config = require('./config')
 
 const app = express()
 // allow cross-origin ajax request
 app.use(cors())
 app.all('*', (req, res, next) => {
-    console.log(`[${req.method}] ${req.url} ${new Date()}`)
     res.header('Access-Control-Allow-Origin', '*')
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
     res.header('Access-Control-Allow-Methods','PUT,POST,GET,DELETE,OPTIONS')
@@ -24,6 +24,35 @@ Object.keys(config.proxyTable).forEach(function (context) {
         options = { target: options }
     }
     options.proxyTimeout = 30000
+    let startTime = 0
+    let requestId = 0
+    options.onProxyReq = (proxyReq, req, res) => {
+        startTime = +new Date()
+        requestId = uuid.v1()
+        console.log('  ')
+        console.log(`************* request start *************`)
+        console.log(`[${getDateStr()} ${req.method}] ${req.url}`)
+        console.log(`requestId: ${requestId}`)
+        console.log(`httpVersion: ${req.httpVersion}`)
+        if (req.method === 'GET') {
+            console.log(`query: ${JSON.stringify(req.query)}`)
+        }
+        Object.keys(req.headers).forEach((key) => {
+            console.log(`header.${key}: ${req.headers[key]}`)
+        })
+        console.log(`************* request end *************`)
+        console.log('  ')
+    }
+    options.onProxyRes = (proxyRes, req, res) => {
+        const usedTime = +new Date() - startTime
+        console.log('  ')
+        console.log(`************* response start *************`)
+        console.log(`[${getDateStr()} ${req.method}] ${req.url}`)
+        console.log(`requestId: ${requestId}`)
+        console.log(`consume time: ${usedTime}ms`)
+        console.log(`************* response end *************`)
+        console.log('  ')
+    }
     app.use(proxyMiddleware(context, options))
 })
 
@@ -33,7 +62,6 @@ app.use(bodyParser.urlencoded({
     extended: false,
     limit: '100000kb'
 }))
-
 app.use(cookieParser())
 
 // catch 404 and forward to error handler
@@ -92,4 +120,21 @@ function onListening () {
         : 'port ' + addr.port
 
     console.log(`[MAIN] Listening on ${bind}`)
+}
+
+function toDouble (val) {
+    if (val < 10) { return '0' + val }
+    return '' + val
+}
+
+function getDateStr () {
+    const objDate = new Date()
+    const year = objDate.getFullYear()
+    const month = objDate.getMonth() + 1
+    const date = objDate.getDate()
+    const hour = objDate.getHours()
+    const minute = objDate.getMinutes()
+    const second = objDate.getSeconds()
+    const millisecond = objDate.getMilliseconds()
+    return `${year}-${toDouble(month)}-${toDouble(date)} ${toDouble(hour)}:${toDouble(minute)}:${toDouble(second)} ${millisecond}`
 }

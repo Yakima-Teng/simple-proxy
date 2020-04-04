@@ -6,9 +6,9 @@
     "scripts": {
         "installDependencies": "npm i -g pm2 && npm i",
         "start": "pm2 start ecosystem.config.js",
-        "restart": "pm2 restart simple-proxy",
-        "delete": "pm2 delete simple-proxy",
-        "stop": "pm2 stop simple-proxy",
+        "restart": "pm2 restart ecosystem.config.js",
+        "delete": "pm2 delete ecosystem.config.js",
+        "stop": "pm2 stop ecosystem.config.js",
         "getShellUsedToStartProjectAfterReboot": "pm2 startup",
         "log": "pm2 log"
     },
@@ -30,6 +30,7 @@
         "cookie-parser": "^1.4.5",
         "cors": "^2.8.5",
         "express": "^4.17.1",
-        "http-proxy-middleware": "^0.17.3"
+        "http-proxy-middleware": "^0.17.3",
+        "uuid": "^7.0.3"
     }
 }

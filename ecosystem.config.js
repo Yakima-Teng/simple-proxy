@@ -1,6 +1,8 @@
+const config = require('./config')
+
 module.exports = {
     apps : [{
-        name: 'simple-proxy',
+        name: `simple-proxy-${config.port}`,
         script: './app.js',
 
         // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
