@@ -2,6 +2,10 @@
 
 Just a simple server to proxy request.
 
+## 配置文件
+
+请将项目根目录的config-example.js文件重命名为config.js文件，然后根据实际需要修改对应配置。
+
 ## 项目部署
 
 ***建议使用`pm2`进行项目的启动与维护。***
