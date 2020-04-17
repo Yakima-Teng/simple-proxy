@@ -33,7 +33,7 @@ Object.keys(config.proxyTable).forEach(function (context) {
         requestId = uuid.v1()
         console.log('  ')
         console.log(`************* request start *************`)
-        console.log(`[${req.method}] ${req.url}`)
+        console.log(`[${req.method}] ${req.url.replace(/\?.*$/, '')}`)
         console.log(`requestId: ${requestId}`)
         shouldPrintMoreInfo && console.log(`httpVersion: ${req.httpVersion}`)
         if (req.query && Object.keys(req.query).length > 0) {
@@ -56,7 +56,7 @@ Object.keys(config.proxyTable).forEach(function (context) {
             const usedTime = +new Date() - startTime
             console.log('  ')
             console.log(`************* response start *************`)
-            console.log(`[${req.method}] ${req.url}`)
+            console.log(`[${req.method}] ${req.url.replace(/\?.*$/, '')}`)
             console.log(`requestId: ${requestId}`)
             shouldPrintMoreInfo && console.log(`httpVersion: ${proxyRes.httpVersion}`)
             shouldPrintMoreInfo && console.log(`consume time: ${usedTime}ms`)
