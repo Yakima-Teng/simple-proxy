@@ -62,7 +62,13 @@ Object.keys(config.proxyTable).forEach(function (context) {
                 console.log(`header.${key}: ${proxyRes.headers[key]}`)
             })
             try {
-                console.log(`responseText: ${JSON.stringify(JSON.parse(buffer.toString()), null, 2)}`)
+                let bufferString = buffer.toString()
+                if (req.url.indexOf('callback=') !== -1) {
+                    bufferString = bufferString.replace(/^.+\((.+)\)/, '$1') // 如果是JSONP请求，则日志里输出括号内的JSON文本即可
+                    console.log(`responseText: ${JSON.stringify(JSON.parse(bufferString), null, 2)}`)
+                } else {
+                    console.log(`responseText: ${JSON.stringify(JSON.parse(buffer.toString()), null, 2)}`)
+                }
             } catch (err) {
                 console.log(`responseText: ${buffer.toString()}`)
             }
