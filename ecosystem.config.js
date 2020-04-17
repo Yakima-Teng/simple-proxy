@@ -10,7 +10,7 @@ module.exports = {
             args: 'by Yakima',
             instances: 1,
             autorestart: true,
-            watch: false,
+            watch: ['config.js'],
             max_memory_restart: '200M',
             env: { // pm2 start ecosystem.config.js
                 NODE_ENV: 'production',
