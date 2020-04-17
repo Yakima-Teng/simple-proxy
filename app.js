@@ -146,3 +146,21 @@ function onListening () {
 
     console.log(`[MAIN] Listening on ${bind}`)
 }
+
+// 将1位数字转为2位数字（字符串）
+function toDouble (val) {
+    if (val > 9) { return `${val}` }
+    return `0${val}`
+}
+
+function getDateStr () {
+    const objDate = new Date()
+    const year = objDate.getFullYear()
+    const month = toDouble(objDate.getMonth() + 1)
+    const date = toDouble(objDate.getDate())
+    const hour = toDouble(objDate.getHours())
+    const minute = toDouble(objDate.getMinutes())
+    const second = toDouble(objDate.getSeconds())
+    const millisecond = toDouble(objDate.getMilliseconds())
+    return `${year}-${month}-${date} ${hour}:${minute}:${second}:${millisecond}`
+}
