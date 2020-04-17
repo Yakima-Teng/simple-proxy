@@ -37,7 +37,14 @@ Object.keys(config.proxyTable).forEach(function (context) {
         console.log(`requestId: ${requestId}`)
         shouldPrintMoreInfo && console.log(`httpVersion: ${req.httpVersion}`)
         if (req.query && Object.keys(req.query).length > 0) {
-            console.log(`query: ${JSON.stringify(req.query, null, 2)}`)
+            const queryObj = JSON.parse(JSON.stringify(req.query))
+            for (let key in queryObj) {
+                const tempVal = queryObj[key]
+                if (typeof tempVal === 'string' && tempVal.length > 100) { // 如果值太长就去掉中间部分
+                    queryObj[key] = tempVal.substring(0, 10) + '...' + tempVal.substring(tempVal.length - 10)
+                }
+            }
+            console.log(`query: ${JSON.stringify(queryObj, null, 2)}`)
         }
         shouldPrintMoreInfo && Object.keys(req.headers).forEach((key) => {
             console.log(`header.${key}: ${req.headers[key]}`)
