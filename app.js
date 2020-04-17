@@ -6,6 +6,8 @@ const proxyMiddleware = require('http-proxy-middleware')
 const cors = require('cors')
 const uuid = require('uuid')
 const config = require('./config')
+const logLevel = config.logLevel
+const shouldPrintMoreInfo = logLevel === 'normal'
 
 const app = express()
 // allow cross-origin ajax request
@@ -33,11 +35,11 @@ Object.keys(config.proxyTable).forEach(function (context) {
         console.log(`************* request start *************`)
         console.log(`[${req.method}] ${req.url}`)
         console.log(`requestId: ${requestId}`)
-        console.log(`httpVersion: ${req.httpVersion}`)
+        shouldPrintMoreInfo && console.log(`httpVersion: ${req.httpVersion}`)
         if (req.method === 'GET') {
             console.log(`query: ${JSON.stringify(req.query, null, 2)}`)
         }
-        Object.keys(req.headers).forEach((key) => {
+        shouldPrintMoreInfo && Object.keys(req.headers).forEach((key) => {
             console.log(`header.${key}: ${req.headers[key]}`)
         })
         console.log(`************* request end *************`)
@@ -56,9 +58,9 @@ Object.keys(config.proxyTable).forEach(function (context) {
             console.log(`************* response start *************`)
             console.log(`[${req.method}] ${req.url}`)
             console.log(`requestId: ${requestId}`)
-            console.log(`httpVersion: ${proxyRes.httpVersion}`)
-            console.log(`consume time: ${usedTime}ms`)
-            Object.keys(proxyRes.headers).forEach((key) => {
+            shouldPrintMoreInfo && console.log(`httpVersion: ${proxyRes.httpVersion}`)
+            shouldPrintMoreInfo && console.log(`consume time: ${usedTime}ms`)
+            shouldPrintMoreInfo && Object.keys(proxyRes.headers).forEach((key) => {
                 console.log(`header.${key}: ${proxyRes.headers[key]}`)
             })
             try {
