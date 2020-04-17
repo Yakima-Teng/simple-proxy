@@ -36,7 +36,7 @@ Object.keys(config.proxyTable).forEach(function (context) {
         console.log(`[${req.method}] ${req.url}`)
         console.log(`requestId: ${requestId}`)
         shouldPrintMoreInfo && console.log(`httpVersion: ${req.httpVersion}`)
-        if (req.method === 'GET') {
+        if (req.query && Object.keys(req.query).length > 0) {
             console.log(`query: ${JSON.stringify(req.query, null, 2)}`)
         }
         shouldPrintMoreInfo && Object.keys(req.headers).forEach((key) => {
