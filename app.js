@@ -89,16 +89,31 @@ Object.keys(config.proxyTable).forEach(function (context) {
             shouldPrintMoreInfo && Object.keys(proxyRes.headers).forEach((key) => {
                 console.log(`header.${key}: ${proxyRes.headers[key]}`)
             })
-            try {
-                let bufferString = buffer.toString()
-                if (req.url.indexOf('callback=') !== -1) {
-                    bufferString = bufferString.replace(/^.+\((.+)\)/, '$1') // 如果是JSONP请求，则日志里输出括号内的JSON文本即可
-                    console.log(`responseText: ${JSON.stringify(JSON.parse(bufferString), null, 2)}`)
-                } else {
-                    console.log(`responseText: ${JSON.stringify(JSON.parse(buffer.toString()), null, 2)}`)
+
+            // 返回的是否是图片等文件/流，是的话不需要打印responseText，但是打印下content-type提示是媒体文件
+            const isMedia = (
+                proxyRes.headers['content-type'].indexOf('image') !== -1 ||
+                proxyRes.headers['content-type'].indexOf('video') !== -1 ||
+                proxyRes.headers['content-type'].indexOf('audio') !== -1 ||
+                proxyRes.headers['content-type'].indexOf('audio') !== -1 ||
+                proxyRes.headers['content-type'].indexOf('application') !== -1
+            )
+            if (isMedia && !shouldPrintMoreInfo) {
+                const key = 'content-type'
+                console.log(`header.${key}: ${proxyRes.headers[key]}`)
+            }
+            if (!isMedia) {
+                try {
+                    let bufferString = buffer.toString()
+                    if (req.url.indexOf('callback=') !== -1) {
+                        bufferString = bufferString.replace(/^.+\((.+)\)/, '$1') // 如果是JSONP请求，则日志里输出括号内的JSON文本即可
+                        console.log(`responseText: ${JSON.stringify(JSON.parse(bufferString), null, 2)}`)
+                    } else {
+                        console.log(`responseText: ${JSON.stringify(JSON.parse(buffer.toString()), null, 2)}`)
+                    }
+                } catch (err) {
+                    console.log(`responseText: ${buffer.toString()}`)
                 }
-            } catch (err) {
-                console.log(`responseText: ${buffer.toString()}`)
             }
             console.log(`************* response end *************`)
             console.log('  ')
