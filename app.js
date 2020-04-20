@@ -28,14 +28,13 @@ Object.keys(config.proxyTable).forEach(function (context) {
     }
     options.proxyTimeout = 30000
     let startTime = 0
-    let requestId = 0
     options.onProxyReq = (proxyReq, req, res) => {
         startTime = +new Date()
-        requestId = uuid.v1()
+        req.simpleProxy = { requestId: uuid.v1() }
         console.log('  ')
         console.log(`************* request start *************`)
         console.log(`[${req.method}] ${req.url.replace(/\?.*$/, '')}`)
-        console.log(`requestId: ${requestId}`)
+        console.log(`requestId: ${req.simpleProxy.requestId}`)
         shouldPrintMoreInfo && console.log(`httpVersion: ${req.httpVersion}`)
         if (req.query && Object.keys(req.query).length > 0) {
             const queryObj = JSON.parse(JSON.stringify(req.query))
@@ -83,7 +82,7 @@ Object.keys(config.proxyTable).forEach(function (context) {
             console.log('  ')
             console.log(`************* response start *************`)
             console.log(`[${req.method}] ${req.url.replace(/\?.*$/, '')}`)
-            console.log(`requestId: ${requestId}`)
+            console.log(`requestId: ${req.simpleProxy.requestId}`)
             shouldPrintMoreInfo && console.log(`httpVersion: ${proxyRes.httpVersion}`)
             shouldPrintMoreInfo && console.log(`consume time: ${usedTime}ms`)
             shouldPrintMoreInfo && Object.keys(proxyRes.headers).forEach((key) => {
