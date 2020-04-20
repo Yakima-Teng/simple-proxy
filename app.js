@@ -1,4 +1,5 @@
 const http = require('http')
+const url = require('url')
 const express = require('express')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
@@ -54,6 +55,24 @@ Object.keys(config.proxyTable).forEach(function (context) {
     }
     options.onProxyRes = (proxyRes, req, res) => {
         const proxyHeaders = proxyRes.headers
+
+        if ('set-cookie' in proxyRes.headers) {
+            const actualDomain = req.headers.referer ? url.parse(req.headers.referer).hostname : ''
+            const rawSetCookieHeader = proxyRes.headers['set-cookie']
+            const newSetCookieHeader = rawSetCookieHeader.map((item) => { // 更新set-cookie头里的Domain=限制
+                let newItem
+                if (/[Dd]omain=.*;/.test(item)) { // domain字段后面还有其他字段，如path=
+                    newItem = item.replace(/^(.*[Dd]omain=)(.+?)(;.*)$/, `$1${actualDomain}$3`)
+                } else { // domain字段后面没有其它字段
+                    newItem = item.replace(/^(.*[Dd]omain=)(.+?)$/, `$1${actualDomain}`)
+                }
+                return newItem
+            })
+            if (newSetCookieHeader.length === 1) {
+                proxyRes.headers['set-cookie'] = newSetCookieHeader[0]
+            }
+        }
+
         const chunks = []
         proxyRes.on('data', chunk => {
             chunks.push(chunk)
