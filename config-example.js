@@ -8,6 +8,7 @@ const config = {
         '/apis/proxy-test': {
             target: 'http://test.api.com',
             changeOrigin: true,
+            cookieDomainRewrite: '',
             pathRewrite (path, req) {
                 return path.replace('/apis/proxy-test', '/apis/proxy')
             },
@@ -15,6 +16,7 @@ const config = {
         '/apis/proxy-production': {
             target: 'http://production.api.com',
             changeOrigin: true,
+            cookieDomainRewrite: '',
             pathRewrite (path, req) {
                 return path.replace('/apis/proxy-production', '/apis/proxy')
             },
