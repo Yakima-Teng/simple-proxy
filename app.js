@@ -49,6 +49,9 @@ Object.keys(config.proxyTable).forEach(function (context) {
         shouldPrintMoreInfo && Object.keys(req.headers).forEach((key) => {
             console.log(`header.${key}: ${req.headers[key]}`)
         })
+        !shouldPrintMoreInfo && ['cookie', 'Cookie'].forEach((key) => {
+            req.headers[key] && console.log(`header.${key}: ${req.headers[key]}`)
+        })
         console.log(`************* request end *************`)
         console.log('  ')
     }
@@ -87,6 +90,9 @@ Object.keys(config.proxyTable).forEach(function (context) {
             shouldPrintMoreInfo && console.log(`consume time: ${usedTime}ms`)
             shouldPrintMoreInfo && Object.keys(proxyRes.headers).forEach((key) => {
                 console.log(`header.${key}: ${proxyRes.headers[key]}`)
+            })
+            !shouldPrintMoreInfo && ['set-cookie', 'Set-Cookie'].forEach((key) => {
+                proxyRes.headers[key] && console.log(`header.${key}: ${proxyRes.headers[key]}`)
             })
 
             // 返回的是否是图片等文件/流，是的话不需要打印responseText，但是打印下content-type提示是媒体文件
