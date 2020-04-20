@@ -78,7 +78,7 @@ Object.keys(config.proxyTable).forEach(function (context) {
             })
 
             // 返回的是否是图片等文件/流，是的话不需要打印responseText，但是打印下content-type提示是媒体文件
-            const isMedia = (
+            const isMedia = proxyRes.headers['content-type'] && (
                 proxyRes.headers['content-type'].indexOf('image') !== -1 ||
                 proxyRes.headers['content-type'].indexOf('video') !== -1 ||
                 proxyRes.headers['content-type'].indexOf('audio') !== -1 ||
